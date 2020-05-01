@@ -1,18 +1,8 @@
-From f1592214e7b2d2f04c0ac6940aca265342fb9f5a Mon Sep 17 00:00:00 2001
-From: Jake Day <jake@ninebysix.com>
-Date: Thu, 27 Jun 2019 11:59:37 -0400
-Subject: [PATCH 03/11] buttons
-
----
- drivers/input/misc/soc_button_array.c     | 133 ++++++++++++++++++++--
- drivers/platform/x86/surfacepro3_button.c |  38 +++++++
- 2 files changed, 159 insertions(+), 12 deletions(-)
-
 diff --git a/drivers/input/misc/soc_button_array.c b/drivers/input/misc/soc_button_array.c
-index bb458beecb43..e35580655cd0 100644
+index 5e59f8e57f8e..08c30aa85601 100644
 --- a/drivers/input/misc/soc_button_array.c
 +++ b/drivers/input/misc/soc_button_array.c
-@@ -29,6 +29,17 @@ struct soc_button_info {
+@@ -25,6 +25,17 @@ struct soc_button_info {
  	bool wakeup;
  };
  
@@ -30,7 +20,7 @@ index bb458beecb43..e35580655cd0 100644
  /*
   * Some of the buttons like volume up/down are auto repeat, while others
   * are not. To support both, we register two platform devices, and put
-@@ -314,6 +325,7 @@ static int soc_button_probe(struct platform_device *pdev)
+@@ -310,6 +321,7 @@ static int soc_button_probe(struct platform_device *pdev)
  {
  	struct device *dev = &pdev->dev;
  	const struct acpi_device_id *id;
@@ -38,7 +28,7 @@ index bb458beecb43..e35580655cd0 100644
  	struct soc_button_info *button_info;
  	struct soc_button_data *priv;
  	struct platform_device *pd;
-@@ -324,18 +336,19 @@ static int soc_button_probe(struct platform_device *pdev)
+@@ -320,18 +332,19 @@ static int soc_button_probe(struct platform_device *pdev)
  	if (!id)
  		return -ENODEV;
  
@@ -67,7 +57,7 @@ index bb458beecb43..e35580655cd0 100644
  	}
  
  	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-@@ -361,12 +374,32 @@ static int soc_button_probe(struct platform_device *pdev)
+@@ -357,12 +370,32 @@ static int soc_button_probe(struct platform_device *pdev)
  	if (!priv->children[0] && !priv->children[1])
  		return -ENODEV;
  
@@ -101,7 +91,7 @@ index bb458beecb43..e35580655cd0 100644
  /*
   * Definition of buttons on the tablet. The ACPI index of each button
   * is defined in section 2.8.7.2 of "Windows ACPI Design Guide for SoC
-@@ -381,9 +414,85 @@ static struct soc_button_info soc_button_PNP0C40[] = {
+@@ -377,9 +410,85 @@ static struct soc_button_info soc_button_PNP0C40[] = {
  	{ }
  };
  
@@ -190,10 +180,10 @@ index bb458beecb43..e35580655cd0 100644
  };
  
 diff --git a/drivers/platform/x86/surfacepro3_button.c b/drivers/platform/x86/surfacepro3_button.c
-index 1b491690ce07..eaec30380b11 100644
+index 47c6d000465a..0e2c7dfafd9f 100644
 --- a/drivers/platform/x86/surfacepro3_button.c
 +++ b/drivers/platform/x86/surfacepro3_button.c
-@@ -24,6 +24,12 @@
+@@ -20,6 +20,12 @@
  #define SURFACE_BUTTON_OBJ_NAME		"VGBI"
  #define SURFACE_BUTTON_DEVICE_NAME	"Surface Pro 3/4 Buttons"
  
@@ -206,7 +196,7 @@ index 1b491690ce07..eaec30380b11 100644
  #define SURFACE_BUTTON_NOTIFY_TABLET_MODE	0xc8
  
  #define SURFACE_BUTTON_NOTIFY_PRESS_POWER	0xc6
-@@ -146,6 +152,34 @@ static int surface_button_resume(struct device *dev)
+@@ -142,6 +148,34 @@ static int surface_button_resume(struct device *dev)
  }
  #endif
  
@@ -241,7 +231,7 @@ index 1b491690ce07..eaec30380b11 100644
  static int surface_button_add(struct acpi_device *device)
  {
  	struct surface_button *button;
-@@ -158,6 +192,10 @@ static int surface_button_add(struct acpi_device *device)
+@@ -154,6 +188,10 @@ static int surface_button_add(struct acpi_device *device)
  	    strlen(SURFACE_BUTTON_OBJ_NAME)))
  		return -ENODEV;
  
@@ -252,6 +242,3 @@ index 1b491690ce07..eaec30380b11 100644
  	button = kzalloc(sizeof(struct surface_button), GFP_KERNEL);
  	if (!button)
  		return -ENOMEM;
--- 
-2.19.1
-
